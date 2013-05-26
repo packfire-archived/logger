@@ -31,7 +31,7 @@ class File extends AbstractLogger {
      * Unlimited file size
      */
 	const SIZE_UNLIMITED = -1;
-    
+
     /**
      * The log file to write to
      * @var string
