@@ -31,12 +31,7 @@ class File extends AbstractLogger {
      * Unlimited file size
      */
 	const SIZE_UNLIMITED = -1;
-
-    /**
-     * Standard formatting
-     */
-    const FORMAT_STANDARD = null;
-
+    
     /**
      * The log file to write to
      * @var string
@@ -60,7 +55,7 @@ class File extends AbstractLogger {
 
 	public function __construct(
 			$file,
-		    FormatInterface $format = self::FORMAT_STANDARD,
+		    FormatInterface $format = null,
 		  	$maxFileSize = self::SIZE_UNLIMITED){
         if(!$file){
             throw new \InvalidArgumentException('File parameter is invalid in creating a file logger.');
@@ -73,6 +68,18 @@ class File extends AbstractLogger {
         $this->format = $format;
 		$this->maxSize = $maxFileSize;
 	}
+
+    public function format(){
+        return $this->format;
+    }
+
+    public function maxSize(){
+        return $this->maxSize;
+    }
+
+    public function file(){
+        return $this->file;
+    }
 
 	public function log($level, $message, array $context = array()){
         $this->write($this->format->format($level, $message, $context) . "\n");
