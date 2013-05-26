@@ -20,10 +20,19 @@ class FileTest extends \PHPUnit_Framework_TestCase {
         
     }
 
-    public function testDefaultParameters(){
+    public function testConstructorDefaultParameters(){
         $logger = new File('testFile');
 
         $this->assertEquals('testFile', $logger->file());
+        $this->assertInstanceOf('Packfire\\Logger\\Format\\Standard', $logger->format());
+        $this->assertEquals(File::SIZE_UNLIMITED, $logger->maxSize());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testConstructorInvalidFile(){
+        $logger = new File('');
     }
     
     
