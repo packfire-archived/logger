@@ -25,19 +25,20 @@ use Packfire\Logger\Format\FormatInterface;
  * @package Packfire\Logger
  * @since 1.0.0
  */
-class File extends AbstractLogger {
+class File extends AbstractLogger
+{
 
     /**
      * Unlimited file size
      */
-	const SIZE_UNLIMITED = -1;
+    const SIZE_UNLIMITED = -1;
 
     /**
      * The log file to write to
      * @var string
      * @since 1.0.0
      */
-	protected $file;
+    protected $file;
 
     /**
      * The format of the log output
@@ -51,57 +52,62 @@ class File extends AbstractLogger {
      * @var integer
      * @since 1.0.0
      */
-	protected $maxSize;
+    protected $maxSize;
 
-	public function __construct(
-			$file,
-		    FormatInterface $format = null,
-		  	$maxFileSize = self::SIZE_UNLIMITED){
-        if(!$file){
+    public function __construct(
+        $file,
+        FormatInterface $format = null,
+        $maxFileSize = self::SIZE_UNLIMITED
+    ) {
+        if (!$file) {
             throw new \InvalidArgumentException('File parameter is invalid in creating a file logger.');
         }
-        if(!$format){
+        if (!$format) {
             $format = new Standard();
         }
 
-		$this->file = $file;
+        $this->file = $file;
         $this->format = $format;
-		$this->maxSize = $maxFileSize;
-	}
+        $this->maxSize = $maxFileSize;
+    }
 
-    public function format(){
+    public function format()
+    {
         return $this->format;
     }
 
-    public function maxSize(){
+    public function maxSize()
+    {
         return $this->maxSize;
     }
 
-    public function file(){
+    public function file()
+    {
         return $this->file;
     }
 
-	public function log($level, $message, array $context = array()){
+    public function log($level, $message, array $context = array())
+    {
         $this->write($this->format->format($level, $message, $context) . "\n");
-	}
+    }
 
-	protected function write($text){
-		$file = $this->file;
+    protected function write($text)
+    {
+        $file = $this->file;
 
-		if($this->maxSize !== self::SIZE_UNLIMITED){
-			$inc = 0;
-			$pathinfo = pathinfo($file);
-			$ext = isset($pathinfo['extension']) ? '.' . $pathinfo['extension'] : '';
-			while(file_exists($file) && filesize($file) > $this->maxSize){
-				++$inc;
-				$file = $pathinfo['dirname'] . '/' . $pathinfo['basename']
-				 . '-' . $inc . $ext;
-			}
-		}
+        if ($this->maxSize !== self::SIZE_UNLIMITED) {
+            $inc = 0;
+            $pathinfo = pathinfo($file);
+            $ext = isset($pathinfo['extension']) ? '.' . $pathinfo['extension'] : '';
+            while (file_exists($file) && filesize($file) > $this->maxSize) {
+                ++$inc;
+                $file = $pathinfo['dirname'] . '/' . $pathinfo['basename']
+                 . '-' . $inc . $ext;
+            }
+        }
 
-		$fh = fopen($file, 'a');
-		fwrite($fh, $text);
-		fclose($fh);
-	}
-
+        $fh = fopen($file, 'a');
+        fwrite($fh, $text);
+        fclose($fh);
+    }
 }

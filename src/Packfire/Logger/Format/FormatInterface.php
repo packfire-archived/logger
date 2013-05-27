@@ -21,8 +21,8 @@ namespace Packfire\Logger\Format;
  * @package Packfire\Logger\Format
  * @since 1.0.0
  */
-interface FormatInterface {
+interface FormatInterface
+{
 
     public function format($level, $message, array $context = array());
-
 }
