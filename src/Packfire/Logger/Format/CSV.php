@@ -11,21 +11,29 @@
 namespace Packfire\Logger\Format;
 
 /**
- * Standard class
+ * CSV class
  *
- * The standard formatting for log entries
+ * The CSV formatting for log entries
  *
  * @author Sam-Mauris Yong / sam@mauris.sg
  * @copyright Copyright (c) 2013 Sam-Mauris Yong
  * @license http://www.opensource.org/licenses/bsd-license New BSD License
  * @package Packfire\Logger\Format
- * @since 1.0.0
+ * @since 1.0.1
  */
-class Standard implements FormatInterface
+class CSV implements FormatInterface
 {
     public function format($level, $message, array $context = array())
     {
-        return date('d M Y h:i.s O') . ' [' . $level . '] "'
-                . addslashes($message) . '"' . ($context ? ' ' . str_replace("\n", '', var_export($context, true)) : '');
+        $data = array(
+            date('d M Y h:i.s O'),
+            $level,
+            $message,
+            ($context ? ' ' . str_replace("\n", '', var_export($context, true)) : '')
+        );
+        foreach ($data as &$value) {
+            $value = addslashes($value);
+        }
+        return implode('", "', $data);
     }
 }
