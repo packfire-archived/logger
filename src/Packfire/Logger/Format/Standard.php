@@ -23,10 +23,9 @@ namespace Packfire\Logger\Format;
  */
 class Standard implements FormatInterface
 {
-
     public function format($level, $message, array $context = array())
     {
-        return date('d M Y h:i.s O') . ' [' . $level . '] '
-                . $message . ($context ? str_replace("\n", '', var_export($context, true)) : '');
+        return date('d M Y h:i.s O') . ' [' . $level . '] "'
+                . addslashes($message) . '"' . ($context ? ' ' . str_replace("\n", '', var_export($context, true)) : '');
     }
 }

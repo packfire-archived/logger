@@ -1,0 +1,43 @@
+<?php
+/**
+* Packfire Logger
+* By Sam-Mauris Yong
+*
+* Released open source under New BSD 3-Clause License.
+* Copyright (c) Sam-Mauris Yong <sam@mauris.sg>
+* All rights reserved.
+*/
+
+namespace Packfire\Logger\Format;
+
+/**
+ * CSV class
+ *
+ * The CSV formatting for log entries
+ *
+ * @author Sam-Mauris Yong / sam@mauris.sg
+ * @copyright Copyright (c) 2013 Sam-Mauris Yong
+ * @license http://www.opensource.org/licenses/bsd-license New BSD License
+ * @package Packfire\Logger\Format
+ * @since 1.0.1
+ */
+class CSV implements FormatInterface
+{
+    public function format($level, $message, array $context = array())
+    {
+        $data = array(
+            date('d M Y h:i.s O'),
+            $level,
+            $message,
+            ($context ? str_replace("\n", '', var_export($context, true)) : '')
+        );
+        foreach ($data as &$value) {
+            $value = addslashes($value);
+        }
+        $result = implode('", "', $data);
+        if ($result) {
+            $result = '"' . $result . '"';
+        }
+        return $result;
+    }
+}
