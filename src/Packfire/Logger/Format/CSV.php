@@ -29,11 +29,15 @@ class CSV implements FormatInterface
             date('d M Y h:i.s O'),
             $level,
             $message,
-            ($context ? ' ' . str_replace("\n", '', var_export($context, true)) : '')
+            ($context ? str_replace("\n", '', var_export($context, true)) : '')
         );
         foreach ($data as &$value) {
             $value = addslashes($value);
         }
-        return implode('", "', $data);
+        $result = implode('", "', $data);
+        if ($result) {
+            $result = '"' . $result . '"';
+        }
+        return $result;
     }
 }
